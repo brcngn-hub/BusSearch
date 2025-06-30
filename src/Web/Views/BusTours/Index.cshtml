@@ -1,0 +1,65 @@
+@{
+    ViewData["Title"] = "Otobüs Turları - Arama";
+}
+
+<div class="container mt-4">
+    <h2>Otobüs Turu Arama</h2>
+    
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            @ViewBag.Error
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-12">
+            <form method="get" action="@Url.Action("Index", "BusTours")" class="mb-4">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Lokasyon ara..." 
+                           value="@Context.Request.Query["search"]" />
+                    <button type="submit" class="btn btn-primary">Ara</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (ViewBag.Locations != null)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Mevcut Lokasyonlar</h4>
+                <div class="list-group">
+                    @foreach (var location in ViewBag.Locations)
+                    {
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">@location.Name</h6>
+                                    <small class="text-muted">@location.City, @location.Country</small>
+                                </div>
+                                <span class="badge bg-primary rounded-pill">ID: @location.Id</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-info" role="alert">
+                    Lokasyon bulunamadı. Lütfen bir şehir veya lokasyon arayın.
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">Ana Sayfaya Dön</a>
+        </div>
+    </div>
+</div> 

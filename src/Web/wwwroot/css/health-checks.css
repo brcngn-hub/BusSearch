@@ -1,0 +1,137 @@
+/* Health Checks UI Custom Styles */
+.health-checks-ui {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.health-checks-ui .hc-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.health-checks-ui .hc-header h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 300;
+}
+
+.health-checks-ui .hc-status {
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.health-checks-ui .hc-status.healthy {
+    border-left: 4px solid #28a745;
+    background-color: #d4edda;
+}
+
+.health-checks-ui .hc-status.degraded {
+    border-left: 4px solid #ffc107;
+    background-color: #fff3cd;
+}
+
+.health-checks-ui .hc-status.unhealthy {
+    border-left: 4px solid #dc3545;
+    background-color: #f8d7da;
+}
+
+.health-checks-ui .hc-entry {
+    padding: 15px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.health-checks-ui .hc-entry:last-child {
+    border-bottom: none;
+}
+
+.health-checks-ui .hc-entry-name {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 5px;
+}
+
+.health-checks-ui .hc-entry-description {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.health-checks-ui .hc-entry-duration {
+    color: #6c757d;
+    font-size: 0.8rem;
+    font-style: italic;
+}
+
+.health-checks-ui .hc-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.health-checks-ui .hc-badge.healthy {
+    background-color: #28a745;
+    color: white;
+}
+
+.health-checks-ui .hc-badge.degraded {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.health-checks-ui .hc-badge.unhealthy {
+    background-color: #dc3545;
+    color: white;
+}
+
+.health-checks-ui .hc-summary {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.health-checks-ui .hc-summary-stats {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.health-checks-ui .hc-stat {
+    flex: 1;
+    padding: 10px;
+}
+
+.health-checks-ui .hc-stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.health-checks-ui .hc-stat-label {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.health-checks-ui .hc-refresh-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.health-checks-ui .hc-refresh-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+} 

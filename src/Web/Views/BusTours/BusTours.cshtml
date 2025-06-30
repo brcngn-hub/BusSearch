@@ -1,0 +1,179 @@
+@{
+    ViewData["Title"] = "Otobüs Turları - Sonuçlar";
+}
+
+<div class="container py-5 bg-light min-vh-100">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h2 class="fw-bold mb-2">Otobüs Tur Sonuçları</h2>
+            <div class="d-inline-block px-4 py-2 bg-white rounded-3 shadow-sm mb-2">
+                <span class="text-muted">Nereden:</span> <span class="fw-semibold">@ViewBag.OriginName</span>
+                <span class="mx-2">→</span>
+                <span class="text-muted">Nereye:</span> <span class="fw-semibold">@ViewBag.DestinationName</span>
+                <span class="mx-2">|</span>
+                <span class="text-muted">Tarih:</span> <span class="fw-semibold">
+                    @{
+                        string tarih = "-";
+                        if (ViewBag.Journeys != null && ViewBag.Journeys.Count > 0)
+                        {
+                            var firstJourney = ViewBag.Journeys[0];
+                            tarih = firstJourney.DepartureDate.ToString("dd/MM/yyyy");
+                        }
+                    }
+                    @tarih
+                </span>
+            </div>
+            <div class="mt-3">
+                <a href="@Url.Action("Index", "Home")" class="btn btn-outline-primary rounded-pill px-4">
+                    <i class="fas fa-arrow-left me-2"></i>Aramaya Geri Dön
+                </a>
+            </div>
+        </div>
+    </div>
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger text-center" role="alert">
+            @ViewBag.Error
+        </div>
+    }
+    @if (ViewBag.Journeys != null && ViewBag.Journeys.Count > 0)
+    {
+        <div class="row g-3">
+            @foreach (var journey in ViewBag.Journeys)
+            {
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm rounded-4 mb-2 p-0">
+                        <div class="d-flex flex-column flex-md-row align-items-center p-3 gap-3">
+                            <!-- Left: Company & Route -->
+                            <div class="flex-grow-1 text-md-start text-center">
+                                <div class="fw-bold fs-4 mb-2 text-primary">@journey.Name</div>
+                                <div class="text-muted fs-6">@journey.Description</div>
+                            </div>
+                            <!-- Center: Times & Duration -->
+                            <div class="flex-grow-1 text-center">
+                                <div class="mb-2">
+                                    <i class="far fa-clock me-2 text-primary fs-5"></i>
+                                    <span class="fw-semibold fs-5">@journey.DepartureDate.ToString("HH:mm")</span>
+                                    <span class="mx-2 text-muted fs-5">→</span>
+                                    <span class="fw-semibold fs-5">@journey.ReturnDate.ToString("HH:mm")</span>
+                                </div>
+                                <div class="text-muted fs-6">
+                                    <i class="far fa-calendar-alt me-2"></i>@journey.DepartureDate.ToString("dd MMM yyyy")
+                                </div>
+                            </div>
+                            <!-- Right: Price & Seats -->
+                            <div class="text-end text-md-end text-center">
+                                <div class="mb-2">
+                                    <span class="fw-bold text-success fs-2">₺@journey.Price.ToString("N2")</span>
+                                </div>
+                                <div class="text-muted fs-6 mb-3">
+                                    <i class="fas fa-chair me-2"></i>Boş Koltuk: <span class="fw-semibold">@(journey.AvailableSeats)</span>
+                                </div>
+                                <button class="btn btn-outline-primary rounded-pill px-4 py-2 fs-6" disabled>Hemen Al</button>
+                            </div>
+                        </div>
+                        @if (journey.Stops != null && journey.Stops.Count > 0)
+                        {
+                            <div class="px-4 pb-3">
+                                <button type="button" class="btn btn-outline-info fs-6 px-3 py-2" data-bs-toggle="modal" data-bs-target="#stopsModal_@journey.Id">
+                                    <i class="fas fa-map-marked-alt me-2"></i>Güzergahı Göster
+                                </button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="stopsModal_@journey.Id" tabindex="-1" aria-labelledby="stopsModalLabel_@journey.Id" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title fs-5" id="stopsModalLabel_@journey.Id">Güzergah Durakları</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-sm table-bordered mb-0 fs-6">
+                                                        <thead class="table-light">
+                                                            <tr>
+                                                                <th class="fs-6">#</th>
+                                                                <th class="fs-6">Durak Adı</th>
+                                                                <th class="fs-6">Saat</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var stop in journey.Stops)
+                                                            {
+                                                                <tr>
+                                                                    <td class="fs-6">@stop.Index</td>
+                                                                    <td class="fs-6">@stop.Name</td>
+                                                                    <td class="fs-6">
+                                                                        @{
+                                                                            var timeStr = "-";
+                                                                            if (stop.Time != null)
+                                                                            {
+                                                                                if (stop.Time is DateTime dt)
+                                                                                {
+                                                                                    timeStr = dt.ToString("HH:mm");
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    DateTime parsed;
+                                                                                    if (DateTime.TryParse(stop.Time.ToString(), out parsed))
+                                                                                    {
+                                                                                        timeStr = parsed.ToString("HH:mm");
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        @timeStr
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary fs-6 px-3 py-2" data-bs-dismiss="modal">Kapat</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        @if (journey.Features != null && journey.Features.Count > 0)
+                        {
+                            <div class="px-4 pb-3">
+                                <div class="fw-semibold mb-2 fs-6">Otobüs Özellikleri:</div>
+                                <div>
+                                    @foreach (var feature in journey.Features)
+                                    {
+                                        <span class="badge bg-info text-dark me-2 mb-2 fs-6 px-3 py-2">@feature</span>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-info text-center py-4 rounded-3 shadow-sm" role="alert">
+                    <h5 class="fw-bold">Sonuç bulunamadı</h5>
+                    <p class="mb-2">Seçilen kriterlere uygun otobüs seferi bulunamadı. Lütfen şunları deneyin:</p>
+                    <ul class="list-unstyled mb-0">
+                        <li>• Farklı tarihler</li>
+                        <li>• Farklı kalkış veya varış noktaları</li>
+                        <li>• Seçilen tarihte güzergahın uygun olup olmadığını kontrol edin</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="row mt-5">
+        <div class="col-12 text-center">
+            <a href="@Url.Action("Index", "Home")" class="btn btn-light border rounded-pill px-4 me-2">Yeni Arama</a>
+            <a href="@Url.Action("Index", "BusTours")" class="btn btn-outline-secondary rounded-pill px-4">Lokasyonları Ara</a>
+        </div>
+    </div>
+</div> 
